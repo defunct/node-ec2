@@ -1,0 +1,3 @@
+<DeleteKeyPairResponse xmlns="http://ec2.amazonaws.com/doc/2010-06-15/">
+  <return>true</return>
+</DeleteKeyPairResponse>

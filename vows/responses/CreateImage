@@ -1,0 +1,3 @@
+<CreateImageResponse xmlns="http://ec2.amazonaws.com/doc/2010-06-15/">
+    <imageId>ami-4fa54026</imageId>
+</CreateImageResponse>

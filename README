@@ -1,0 +1,20 @@
+NODE EC2
+
+Evended Node.js bindings to the EC2 Query API.
+
+    Home: http://bigeasy.github.com/node-ec2
+    Source: http://github.com/bigeasy/node-ec2
+    Documentation: http://github.com/bigeasy/node-ec2/wiki
+
+    Issues: http://github.com/bigeasy/node-ec2/issues
+
+    License: The MIT License
+
+PURPOSE
+
+Launch Amazon EC2 instances from Node.js and execute callbacks when the
+instances are available.
+
+    http://github.com/bigeasy/node-ec2/wiki/Concerns-and-Decisions
+
+Shortly, most of what you'll need to know will be in this README.

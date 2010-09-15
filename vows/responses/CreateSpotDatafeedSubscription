@@ -1,0 +1,8 @@
+<CreateSpotDatafeedSubscriptionResponse xmlns="http://ec2.amazonaws.com/doc/2010-06-15/">
+    <spotDatafeedSubscription>
+        <ownerId>254933287430</ownerId>
+        <bucket>my-bucket</bucket>
+        <prefix/>
+        <state>open</state>
+    </spotDatafeedSubscription>
+</CreateSpotDatafeedSubscriptionResponse>

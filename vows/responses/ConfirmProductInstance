@@ -1,0 +1,4 @@
+<ConfirmProductInstanceResponse xmlns="http://ec2.amazonaws.com/doc/2010-06-15/">
+  <return>true</return>
+  <ownerId>254933287430</ownerId>
+</ConfirmProductInstanceResponse>

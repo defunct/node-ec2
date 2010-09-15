@@ -1,0 +1,9 @@
+<CancelSpotInstanceRequestsResponse xmlns="http://ec2.amazonaws.com/doc/2010-06-15/">
+  <requestId>59dbff89-35bd-4eac-99ed-be587ed81825</requestId>
+  <spotInstanceRequestSet>
+    <item>
+      <spotInstanceRequestId>sir-e95fae02</spotInstanceRequestId>
+      <state>cancelled</state>
+    </item>
+  </spotInstanceRequestSet>
+</CancelSpotInstanceRequestsResponse>
