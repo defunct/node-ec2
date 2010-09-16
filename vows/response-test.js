@@ -125,6 +125,10 @@ vows.describe("Response").addBatch({
         }),
         "DeleteSnapshot": responseValid("DeleteSnapshot",
         { "return": true
+        }),
+        "Errors": responseValid("Errors",
+        { Errors: [ { Code: 'MissingParameter', Message: 'The request must\ncontain the parameter\nMinCount' } ]
+        , RequestID: '2258815d-0be5-4491-b199-673aec77dfe3'
         })
     } 
 }).export(module);

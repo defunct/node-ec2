@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response><Errors><Error><Code>MissingParameter</Code><Message>The request must
+contain the parameter
+MinCount</Message></Error></Errors><RequestID>2258815d-0be5-4491-b199-673aec77dfe3</RequestID></Response>
