@@ -1,10 +1,12 @@
+# Require Node.js core modules.
 sys             = require("sys")
 events          = require("events")
 
-# Include the units.
+# Require Node EC2 specific modules.
 ResponseParser  = require("./response").ResponseParser
 invoke          = require("./request").invoke
 
+# Used whan a callback is not provided.
 noop = () -> true
 
 class AmazonEC2Client extends events.EventEmitter
@@ -24,6 +26,7 @@ class AmazonEC2Client extends events.EventEmitter
       callback = parameters
       parameters = {}
     parameters or= {}
+    callback or= noop
     @commands.push({ name, parameters, callback, retry })
 
   execute: () =>
@@ -41,7 +44,7 @@ class AmazonEC2Client extends events.EventEmitter
                 return
               if statusCode == 2
                 try
-                  outcome = (command.callback || noop)(struct)
+                  outcome = command.callback(struct)
                 catch _
                   @emit "error", [ _, responder.statusCode]
                   return
