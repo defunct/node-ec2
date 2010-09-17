@@ -5,19 +5,19 @@ var vows = require("vows"),
 function responseValid (name, expected) {
     return function (topic) {
         var invoked = false;
-        var parser = topic.parser(function (error, response) {
+        var parser = new topic.ResponseParser();
+        parser.read(fs.readFileSync(__dirname + "/responses/" + name, "utf8"), function (error, response) {
             if (error) throw error;
             invoked = true;
             assert.deepEqual(response, expected);
         });
-        parser.read(fs.readFileSync(__dirname + "/responses/" + name, "utf8"));
         assert.isTrue(invoked);
     }
 }
 
 vows.describe("Response").addBatch({
     "Response can parse": {
-        topic: require("__internal/response"),
+        topic: require("../lib/response"),
         "AllocateAddress": responseValid("AllocateAddress",
         { "publicIp": "67.202.55.255"
         }),
