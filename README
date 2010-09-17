@@ -16,9 +16,11 @@ PURPOSE
 Launch Amazon EC2 instances from Node.js and execute callbacks when the
 instances are available.
 
-Currently, in pre-alpha, you can follow my thought process below.
+node-ec2 is a minimal Node.js API with absolutely no sugar. node-ec2 signs your
+get requests and converts the XML responses to JSON. Becasue of this, there is a
+one to one mapping between the Amazon Query API and the actions provided by
+node-ec2 and changes to the Amazon Query API are available immediately to
+node-ec2 applications.
 
-    http://github.com/bigeasy/node-ec2/wiki/Concerns-and-Decisions
-
-Please, find me on #node.js IRC as prettyrobots or ask questions in the Node.js
-Google Group..
+You can learn more about node-ec2 at the node-ec2 GitHub web page and by reading
+the wiki.

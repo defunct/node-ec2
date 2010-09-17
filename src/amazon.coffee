@@ -33,7 +33,7 @@ class AmazonEC2Client extends events.EventEmitter
       command = @commands.shift()
       invoke @options.key, @options.secret, command.name, command.parameters,
         (response, body) =>
-          statusCode = Math.floor response.statusCode / 100
+          statusCode = Math.floor(response.statusCode / 100)
           if command.callback || statusCode != 2
             @parser.read body, (error, struct) =>
               if error
