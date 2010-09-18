@@ -21,12 +21,11 @@ Cannot find the ec2 module JavaScript.\n\
   HACKING for more information on how to to build node-ec2.\n\
 \n\
   Still confused? Pop over to #node.js on IRC and ask prettyrobots for help.\n\
-==============================================================================\n\
-  \n"
+==============================================================================\n"
 try {
   var foo = require("./lib/amazon.js")
 } catch (_) {
-  if (_.message === "Cannot find module './foo'") {
+  if (_.message === "Cannot find module './lib/amazon.js'") {
     throw new Error(message);
     console.log(_);
   } else {
