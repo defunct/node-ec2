@@ -33,13 +33,13 @@ task "gitignore", "create a .gitignore for node-ec2 based on git branch", ->
                    '''
     else if branch is "master"
       gitignore += '''
-                   site/documentation
+                   documentation
                    lib
                    '''
     fs.writeFile(".gitignore", gitignore)
 
 task "docco", "rebuild the CoffeeScript docco documentation.", ->
-  exec "rm -rf site/documentation && docco src/*.coffee && cp -rf docs site/documentation && rm -r docs", (err) ->
+  exec "rm -rf documentation && docco src/*.coffee && cp -rf docs documentation && rm -r docs", (err) ->
     throw err if err
 
 task "compile", "compile the CoffeeScript into JavaScript", ->
