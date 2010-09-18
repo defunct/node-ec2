@@ -13,12 +13,13 @@ task "gitignore", "create a .gitignore for node-ec2 based on git branch", () ->
                 .gitignore
                 .DS_Store
                 **/.DS_Store
+                
                 '''
 
     branch = /\*\s+(.*)/.exec(branches)[1]
     if branch is "master"
       gitignore += '''
-                   docs
+                   documentation
                    lib
                    '''
     fs.writeFile(".gitignore", gitignore)
