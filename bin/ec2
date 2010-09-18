@@ -1,4 +1,10 @@
-var ec2 = require("./lib/amazon"), sys = require("sys");
+#!/usr/bin/env node
+
+var path = require("path"),
+    sys = require("sys"),
+    fs = require("fs"),
+    lib = path.join(path.dirname(fs.realpathSync(__filename)), "../lib"),
+    ec2 = require(lib + "/amazon");
 
 var args = process.argv.slice(2);
 
@@ -25,5 +31,3 @@ amazon.execute();
 process.on("uncaughtException", function (err) {
   console.error("Uncaught Exception: " + err);
 });
-
-// vim: set ts=2 sw=2 et nowrap:
