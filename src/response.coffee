@@ -21,13 +21,12 @@ isTimestamp = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d*)Z/
 
 class ResponseParser
 
-  # Construct a new reponse parser which is based on a **SaxPushParser**, even
-  # though we don't take advantage of the pushyness of the parser yet.
+  # Construct a new reponse parser which is based on a **SaxParser**.
   constructor: () ->
     accumulator = []
     depth = 0
     names = []
-    @sax = new libxml.SaxPushParser (sax) =>
+    @sax = new libxml.SaxParser (sax) =>
 
       # We push collections onto the stack at start and reset the accumulator.
       sax.onStartElementNS (elem) =>
@@ -119,7 +118,7 @@ class ResponseParser
     @base = {}
     @branches = [ @base ]
     @callback = callback || () ->
-    @sax.push(text)
+    @sax.parseString(text)
 
 # Export **ResponseParser**.
 module.exports.ResponseParser = ResponseParser

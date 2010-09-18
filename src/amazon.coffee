@@ -40,22 +40,22 @@ class AmazonEC2Client extends events.EventEmitter
           if command.callback || statusCode != 2
             @parser.read body, (error, struct) =>
               if error
-                @emit "error", [ error, responder.statusCode]
+                @emit "error", error, response.statusCode
                 return
               if statusCode == 2
                 try
                   outcome = command.callback(struct)
                 catch _
-                  @emit "error", [ _, responder.statusCode]
+                  @emit "error",  _, response.statusCode
                   return
                 if command.retry and !outcome
                   @commands.unshift command
-                  execute = () => @execute
+                  execute = () => @execute()
                   setTimeout execute, 1000
                 else
                   @execute()
               else
-                @emit "error", [ struct, responder.statusCode]
+                @emit "error", struct, response.statusCode
           else
             @execute()
 
