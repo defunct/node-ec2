@@ -7,7 +7,7 @@ ResponseParser  = require("./response").ResponseParser
 invoke          = require("./request").invoke
 
 # Used whan a callback is not provided.
-noop = () -> true
+noop = -> true
 
 class AmazonEC2Client extends events.EventEmitter
 
