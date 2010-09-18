@@ -10,7 +10,8 @@ We do not check the `.gitignore` file into git, because other branches,
 
 Other cake tasks important to development.
 
-    cake
+    cake compile
     cake docco
+    cake clean
 
 Send me a pull request when you've got something interesting.
