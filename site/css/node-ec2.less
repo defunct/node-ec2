@@ -1,0 +1,79 @@
+/* LESS Stylesheet for Reflective. */
+
+@import 'blueprint/screen.css';
+
+@background: #f3f3f4;
+@foreground: #2388cd;
+
+.span (@columns: 1, @deduction: 0) {
+    .column;
+    width: (40px * @columns - 10px) - @deduction;
+}
+
+.left(@columns: 1) {
+  margin-left: (40px * @columns);
+}
+
+.right(@columns: 1) {
+  margin-right: (40px * @columns);
+}
+
+.border-top-left-radius (@radius: 5px) {
+  -moz-border-radius-topleft: @radius;
+  -webkit-border-top-left-radius: @radius;
+  border-top-left-radius: @radius;
+}
+
+.border-top-right-radius (@radius: 5px) {
+  -moz-border-radius-topright: @radius;
+  -webkit-border-top-right-radius: @radius;
+  border-top-right-radius: @radius;
+}
+
+.border-bottom-right-radius (@radius: 5px) {
+  -moz-border-radius-bottomright: @radius;
+  -webkit-border-bottom-right-radius: @radius;
+  border-bottom-right-radius: @radius;
+}
+
+.border-bottom-left-radius (@radius: 5px) {
+  -moz-border-radius-bottomleft: @radius;
+  -webkit-border-bottom-left-radius: @radius;
+  border-bottom-left-radius: @radius;
+}
+
+.border-radius (@radius: 5px) {
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+  border-radius: @radius;
+}
+
+body {
+    text-align: center;
+    background: @background;
+}
+
+@font-face {
+    font-family: "Bitstream Vera Sans Bold";
+    src: url("VeraMoBd.ttf") format("truetype");
+}
+
+
+#title {
+    .span(24); .last;
+    color: #dae2ef;
+    text-align: left;
+    font-size: 3em;
+    font-family: "Bitstream Vera Sans Bold", Tahoma, sans-serif;
+    font-weight: bold;
+}
+
+#content {
+    .span(24); .last;
+    text-align: left;
+}
+
+#article {
+    .left(7); .span(16); .right(1);
+    letter-spacing: 0.1em;
+}
