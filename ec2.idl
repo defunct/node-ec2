@@ -4,6 +4,62 @@ Evended Node.js bindings to the EC2 Query API.
 
 ## Synopsis
 
+Node EC2 is a thin layer over the Amazon Query API.
+
+Because `node-ec2` is a thin layer over the Amazon Query API, you can use the
+[Amazon API
+Reference](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?query-apis.html)
+to find your way around. Node EC2 calls translate directly to Amazon Query API.
+
+Other than converting parameter maps to signed query strings and converting the
+XML responses to JSON objects, there is no syntactic sugar. See Rationale.
+
+Here's an example using
+[RunInstances](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?ApiReference-query-RunInstances.html).
+
+```javascript
+var ec2 = require("ec2");
+
+// Create an instance of the AmazonEC2Client.
+var client = ec2.createClient(
+{ key:      process.env["AWS_ACCESS_KEY_ID"]
+, secret:   process.env["AWS_SECRET_ACCESS_KEY"]
+});
+
+// Track the progress of the API invocation in the lexical scope.
+var instanceId, 
+    reservationId;
+
+// Call the "RunInstances" action to create a new EC2 instance. The Amazon Query
+// API call will return immediately, but the instance will take a while to boot.
+client.call("RunInstances", {
+  ImageId: "ami-2d4aa444", KeyName: "launch_key"
+}, function (response) {
+  reservationId   = response.reservationId;
+  instanceId      = response.instancesSet[0].instanceId;
+});
+
+// Therefore, we poll the  "DescribeInstances" action, calling it once every
+// second until the instance state indicates that it is running.
+client.poll("DescribeInstances", function (struct) {
+  var reservation = struct.reservationSet.filter(function (reservation) {
+    return reservation.reservationId == reservationId;
+  })[0];
+  var instance = reservation.instancesSet.filter(function (instance) {
+    return instance.instanceId == instanceId;
+  })[0];
+  return instance.instanceState.name == "running";
+});
+
+// When all of the Amazon Query API calls and polls complete, we know that our
+// Amazon EC2 instance is ready for use.
+client.on("end", function () {
+  console.log("Instance created with id: " + instanceId);
+});
+
+// Run the trasaction described above.
+client.execute();
+```
 ## Installing
 
 The easiest way to install is using npm.
@@ -14,55 +70,6 @@ npm install ec2
 
 You can also checkout the source code for incusion in your `NODE_PATH` using
 `git`. 
-
-That is some example code for the synopsis. Then we go on and describe the
-project in in more detail. The purpose, etc. We can have examples. Wouldn't it
-be nice if we had a flavor of markup that would link to example code? Let's say
-we add a special notation like {{createClient}} that will link to code.
-
-```javascript
-var i = 0;
-```
-
-Above is some highlighted code. There is more that we can do here. I'm curious
-to know how someone would do a table, since tables are very popular.
-
-Because `node-ec2` is a thin layer over the Amazon Query API, you can use the
-[Amazon API
-Reference](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?query-apis.html)
-to find your way around. Here's an example using
-[RunInstances](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?ApiReference-query-RunInstances.html).
-
-```javascript
-var ec2 = require("ec2");
-
-var client = ec2.createClient(
-{ key:      process.env["AWS_ACCESS_KEY_ID"]
-, secret:   process.env["AWS_SECRET_ACCESS_KEY"]
-});
-
-var instanceId, reservationId;
-client.call("RunInstances", {
-  ImageId: "ami-2d4aa444", KeyName: "launch_key"
-}, function (response) {
-  reservationId   = response.reservationId;
-  instanceId      = response.instancesSet[0].instanceId;
-});
-client.poll("DescribeInstances", function (struct) {
-  var reservation = struct.reservationSet.filter(function (reservation) {
-    return reservation.reservationId == reservationId;
-  })[0];
-  var instance = reservation.instancesSet.filter(function (instance) {
-    return instance.instanceId == instanceId;
-  })[0];
-  return instance.instanceState.name == "running";
-});
-client.on("end", function () {
-  console.log("Instance created with id: " + instanceId);
-});
-
-client.execute();
-```
 
 ## Reference
 
@@ -76,7 +83,7 @@ var ec2 = require("ec2");
 ```
 function: createClient
 
-Creates an {{AmazonEC2Client}} object for use in ...
+Creates an {{AmazonEC2Client}} object for use in 
 
 class: AmazonEC2Client
 
@@ -84,13 +91,36 @@ Communicates with the Amazon Query API.
 
 function: call
 
+  parameter: name
+
+  The Amazon EC2 Query API action to perform.
+
+  parameter: parameters optional
+
+  Named parameters for the Amazon EC2 Query API action.
+
+  parameter: callback   optional
+
+  A callback function that is called with JSON object containing the Amazon EC2
+  Query API repsonse when the Amazon EC2 Query API action completes.
+
 Call an Amazon Query API action.
 
 function: poll
 
-parameter: name
-parameter: parameters optional
-parameter: callback   optional
+  parameter: name
+
+  The Amazon EC2 Query API action to perform.
+
+  parameter: parameters optional
+
+  Named parameters for the Amazon EC2 Query API action.
+
+  parameter: callback   optional
+
+  A callback function that is called with JSON object containing the Amazon EC2
+  Query API repsonse when the Amazon EC2 Query API action completes. If the
+  callback function returns `false` the query is performed again.
 
 Call an Amazon Query API action while a condition is false.
 
@@ -100,10 +130,17 @@ Run the query.
 
 event: error
 
+  parameter: error
+
+  The error response structure.
+
+  parameter: statusCode
+
+  The HTTP status code for the error response.
+
 Called when there is any error, both network errors, and exceptions thrown by
 callbacks, so that you have a chance to release instances if things go wrong.
 
-parameter: error
 
 event: end
 
