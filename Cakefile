@@ -60,5 +60,5 @@ task "compile", "compile the CoffeeScript into JavaScript", ->
 task "clean", "rebuild the CoffeeScript docco documentation.", ->
   currentBranch (branch) ->
     if branch is "master"
-      exec "rm -rf documentation lib _site", (err) ->
+      exec "rm -rf documentation lib _site site/idl.css index.html", (err) ->
         throw err if err

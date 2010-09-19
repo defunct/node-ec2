@@ -99,10 +99,11 @@ function: execute
 Run the query.
 
 event: error
-parameter: error
 
 Called when there is any error, both network errors, and exceptions thrown by
 callbacks, so that you have a chance to release instances if things go wrong.
+
+parameter: error
 
 event: end
 
