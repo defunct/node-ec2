@@ -44,10 +44,10 @@ function launch () {
   amazon.poll("DescribeInstances", function (struct) {
     var reservation = struct.reservationSet.filter(function (reservation) {
       return reservation.reservationId == state.reservationId;
-    })[0];
+    }).pop():
     var instance = reservation.instancesSet.filter(function (instance) {
       return instance.instanceId == state.instanceId;
-    })[0];
+    }).pop();
     return instance.instanceState.name == "running";
   });
   amazon.call("AttachVolume",
