@@ -60,7 +60,7 @@ invoke = (key, secret, command, parameters, callback) ->
     query.join("&")
 
   # Generate the HMAC.
-  hmac = crypto.createHmac "sha256", process.env["AWS_SECRET_ACCESS_KEY"]
+  hmac = crypto.createHmac "sha256", secret
   hmac.update toSign
   digest = querystring.escape(hmac.digest("base64"))
 
