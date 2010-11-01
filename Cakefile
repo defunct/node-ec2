@@ -1,7 +1,6 @@
 fs              = require("fs")
 {exec, spawn}   = require("child_process")
 path            = require("path")
-idl             = require("idl")
 
 compile = (sources) ->
   coffee =          spawn "coffee", "-c -o lib".split(/\s/).concat(sources)
@@ -46,6 +45,7 @@ task "docco", "rebuild the CoffeeScript docco documentation.", ->
     throw err if err
 
 task "index", "rebuild the Node IDL landing page.", ->
+  idl     = require("idl")
   package = JSON.parse fs.readFileSync "package.json", "utf8"
   console.log(package)
   idl.generate "#{package.name}.idl", "index.html"
