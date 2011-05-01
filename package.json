@@ -3,4 +3,7 @@
 ,   "author":           "Alan Gutierrez"
 ,   "directories":      { "lib" : "./lib" }
 ,   "main":             "./lib/amazon"
+,   "dependencies":
+    {   "node-xml": ">=1.0.0"
+    }
 }

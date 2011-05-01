@@ -1,6 +1,6 @@
 # Require Node.js core modules.
 crypto          = require("crypto")
-http            = require("http")
+http            = require("https")
 querystring     = require("querystring")
 
 # Oh, how I miss you sprintf.
@@ -69,17 +69,18 @@ invoke = (key, secret, command, parameters, callback) ->
 
   # Connect to the Amazon Query API server, gather the response, and feed it to
   # the callback function.
-  client = http.createClient 443, "ec2.amazonaws.com", true
-  headers = { host: "ec2.amazonaws.com" }
-  request = client.request "GET", ("/?" + query.join("&")), headers
+  request = http.request
+    port: 443
+    host: "ec2.amazonaws.com"
+    method: "GET"
+    path: "/?" + query.join "&"
+    headers: { host: "ec2.amazonaws.com" }
+    (response) ->
+      body = ""
+      response.setEncoding "utf8"
+      response.on "data", (chunk) -> body += chunk
+      response.on "end", () -> callback response, body
   request.end()
-  request.on "response", (response) ->
-    body = ""
-    response.setEncoding "utf8"
-    response.on "data", (chunk) ->
-      body += chunk
-    response.on "end", () ->
-      callback response, body
   true
 
 module.exports.invoke = invoke

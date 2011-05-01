@@ -15,3 +15,11 @@ Other cake tasks important to development.
     cake clean
 
 Send me a pull request when you've got something interesting.
+
+Run tests with:
+
+    NODE_PATH=./lib vows vows/*.js --spec
+
+Check coverage with:
+
+    expresso coverage.js --coverage

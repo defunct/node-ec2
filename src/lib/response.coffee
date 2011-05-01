@@ -13,7 +13,7 @@
 # documentation as a reference for query results.
 
 # Require libxml.
-libxml = require "libxmljs"
+xml = require "node-xml"
 
 # Matches a timestamp in [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601)
 # format.
@@ -26,11 +26,10 @@ class ResponseParser
     accumulator = []
     depth = 0
     names = []
-    @sax = new libxml.SaxParser (sax) =>
+    @sax = new xml.SaxParser (sax) =>
 
       # We push collections onto the stack at start and reset the accumulator.
       sax.onStartElementNS (elem) =>
-
         # When the element name is `item` or `Error` the parent is a list of
         # items or errors, so we create a list if it does not exist.
         if /^item|Error$/.test(elem)
@@ -110,6 +109,7 @@ class ResponseParser
 
       # Errors are reported to our caller.
       sax.onError (msg) =>
+        console.log "blurgh", msg
         @callback new Error(msg), null
 
   # Parses the Amazon Query API response `text` and invokes the `callback` with

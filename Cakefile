@@ -122,7 +122,7 @@ task "compile", "compile the CoffeeScript into JavaScript", ->
         process.exit(code) unless code is 0
         next(callback)
   next ->
-    shebang "#!/usr/bin/env node", "bin/tz2json.js"
+    shebang "#!/usr/bin/env node", "bin/ec2.js"
 
 # Run Expresso test coverage.
 task "coverage", "run coverage", ->
