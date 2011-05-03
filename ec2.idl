@@ -73,7 +73,7 @@ You can also checkout the source code for incusion in your `NODE_PATH` using
 
 ## Reference
 
-namespace: ec2
+@ ec2
 
 Node EC2 exports the ec2 namespace, which includes a single factory method to
 crate the Amazon EC2 Query API client object.

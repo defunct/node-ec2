@@ -11,29 +11,29 @@ noop = -> true
 
 class AmazonEC2Client extends events.EventEmitter
 
-  constructor: (@options) ->
-    @commands = []
+  constructor: (@_options) ->
+    @_commands = []
 
   call: (name, parameters, callback) ->
-    @push false, name, parameters, callback
+    @_push false, name, parameters, callback
 
   poll: (name, parameters, callback) ->
-    @push true, name, parameters, callback
+    @_push true, name, parameters, callback
 
-  push: (retry, name, parameters, callback) ->
+  _push: (retry, name, parameters, callback) ->
     if typeof parameters == "function"
       callback = parameters
       parameters = {}
     parameters or= {}
     callback or= noop
-    @commands.push({ name, parameters, callback, retry })
+    @_commands._push({ name, parameters, callback, retry })
 
   execute: () =>
-    if (@commands.length == 0)
+    if (@_commands.length == 0)
       @emit("end")
     else
-      command = @commands.shift()
-      invoke @options.key, @options.secret, command.name, command.parameters,
+      command = @_commands.shift()
+      invoke @_options.key, @_options.secret, command.name, command.parameters,
         (response, body) =>
           statusCode = Math.floor(response.statusCode / 100)
           if command.callback || statusCode != 2
@@ -51,7 +51,7 @@ class AmazonEC2Client extends events.EventEmitter
                   @emit "error",  _, response.statusCode
                   return
                 if command.retry and !outcome
-                  @commands.unshift command
+                  @_commands.unshift command
                   execute = () => @execute()
                   setTimeout execute, 1000
                 else
