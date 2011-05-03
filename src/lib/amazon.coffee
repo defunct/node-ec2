@@ -13,7 +13,6 @@ class AmazonEC2Client extends events.EventEmitter
 
   constructor: (@options) ->
     @commands = []
-    @parser = new ResponseParser
 
   call: (name, parameters, callback) ->
     @push false, name, parameters, callback
@@ -38,9 +37,12 @@ class AmazonEC2Client extends events.EventEmitter
         (response, body) =>
           statusCode = Math.floor(response.statusCode / 100)
           if command.callback || statusCode != 2
-            @parser.read body, (error, struct) =>
+            # Unfortunately, we cannot reuse the ResponseParser, since node-xml
+            # does not reset itself and offers tno reset function.
+            parser = new ResponseParser
+            parser.read body, (error, struct) =>
               if error
-                @emit "error", error, response.statusCode
+                @emit "error", error, null, response.statusCode
                 return
               if statusCode == 2
                 try
@@ -55,7 +57,8 @@ class AmazonEC2Client extends events.EventEmitter
                 else
                   @execute()
               else
-                @emit "error", struct, response.statusCode
+                console.log struct
+                @emit "error", null, struct, response.statusCode
           else
             @execute()
 
