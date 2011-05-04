@@ -26,7 +26,7 @@ class AmazonEC2Client extends events.EventEmitter
       parameters = {}
     parameters or= {}
     callback or= noop
-    @_commands._push({ name, parameters, callback, retry })
+    @_commands.push({ name, parameters, callback, retry })
 
   execute: () =>
     if (@_commands.length == 0)
