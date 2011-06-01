@@ -28,7 +28,7 @@ invoke = (endpoint, key, secret, command, parameters, callback) ->
     SignatureMethod: "HmacSHA256"
     Timestamp: timestamp()
     SignatureVersion: 2
-    Version: "2010-06-15"
+    Version: "2011-05-15"
 
   # Merge the request specific parameters with the common parameters.
   for key, value of parameters
