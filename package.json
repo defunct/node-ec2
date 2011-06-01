@@ -1,8 +1,9 @@
 {   "name":             "ec2"
-,   "version":          "0.0.3"
+,   "version":          "0.0.6"
 ,   "author":           "Alan Gutierrez"
 ,   "directories":      { "lib" : "./lib" }
 ,   "main":             "./lib/amazon"
+,   "bin":              { "ec2": "./bin/ec2" }
 ,   "dependencies":
     {   "node-xml": ">=1.0.0"
     }
