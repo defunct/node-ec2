@@ -13,6 +13,7 @@ class AmazonEC2Client extends events.EventEmitter
 
   constructor: (@_options) ->
     @_commands = []
+    @_options.endpoint or= "us-east-1"
 
   call: (name, parameters, callback) ->
     @_push false, name, parameters, callback
@@ -33,7 +34,7 @@ class AmazonEC2Client extends events.EventEmitter
       @emit("end")
     else
       command = @_commands.shift()
-      invoke @_options.key, @_options.secret, command.name, command.parameters,
+      invoke @_options.endpoint, @_options.key, @_options.secret, command.name, command.parameters,
         (response, body) =>
           statusCode = Math.floor(response.statusCode / 100)
           if command.callback || statusCode != 2

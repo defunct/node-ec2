@@ -18,7 +18,7 @@ timestamp = () ->
   minutes   = pad(now.getUTCMinutes())
   "#{year}-#{month}-#{day}T#{hours}:#{minutes}:00Z"
 
-invoke = (key, secret, command, parameters, callback) ->
+invoke = (endpoint, key, secret, command, parameters, callback) ->
   # The parameters common to all Amazon Query API requests as documented in
   # [Making Query Requests](http://docs.amazonwebservices.com/AWSEC2/latest/DeveloperGuide/index.html?using-query-api.html)
   # in the Amazon Elastic Compute Cloud Developer Guide.
@@ -55,7 +55,7 @@ invoke = (key, secret, command, parameters, callback) ->
   # The string includes the request verb, server, request path and the query
   # string sorted by the lexical order of the parameter names.
   toSign = "GET\n" +
-    "ec2.amazonaws.com\n" +
+    "ec2.#{endpoint}.amazonaws.com\n" +
     "/\n" +
     query.join("&")
 
@@ -71,10 +71,10 @@ invoke = (key, secret, command, parameters, callback) ->
   # the callback function.
   request = http.request
     port: 443
-    host: "ec2.amazonaws.com"
+    host: "ec2.#{endpoint}.amazonaws.com"
     method: "GET"
     path: "/?" + query.join "&"
-    headers: { host: "ec2.amazonaws.com" }
+    headers: { host: "ec2.#{endpoint}.amazonaws.com" }
     (response) ->
       body = ""
       response.setEncoding "utf8"
