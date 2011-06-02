@@ -1,5 +1,5 @@
 {   "name":             "ec2"
-,   "version":          "0.0.7"
+,   "version":          "0.0.8"
 ,   "author":           "Alan Gutierrez"
 ,   "directories":      { "lib" : "./lib" }
 ,   "main":             "./lib/amazon"

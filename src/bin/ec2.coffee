@@ -1,3 +1,4 @@
+fs = require "fs"
 ec2 = require "ec2"
 
 argv = process.argv.slice 2
@@ -54,9 +55,9 @@ if format
   if rest and rest.trim().length isnt 0
     throw new Error "invalid pattern."
 
-client = ec2.createClient
-  key: process.env["AWS_ACCESS_KEY_ID"]
-  secret: process.env["AWS_SECRET_ACCESS_KEY"]
+file = process.env["AWS_CONFIG"] or "#{process.env["HOME"]}/.aws"
+configuration = JSON.parse fs.readFileSync file, "utf8"
+client = ec2.createClient configuration
 
 client.on "error", (error) ->
   console.log "error", error
