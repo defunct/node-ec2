@@ -81,6 +81,7 @@ invoke = (endpoint, key, secret, command, parameters, callback) ->
       response.on "data", (chunk) -> body += chunk
       response.on "end", () -> callback null, response, body
       response.on "error", (error) -> callback error
+  response.on "error", (error) -> callback error
   request.end()
   true
 
