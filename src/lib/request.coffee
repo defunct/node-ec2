@@ -79,7 +79,8 @@ invoke = (endpoint, key, secret, command, parameters, callback) ->
       body = ""
       response.setEncoding "utf8"
       response.on "data", (chunk) -> body += chunk
-      response.on "end", () -> callback response, body
+      response.on "end", () -> callback null, response, body
+      response.on "error", (error) -> callback error
   request.end()
   true
 

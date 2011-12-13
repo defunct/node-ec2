@@ -35,33 +35,36 @@ class AmazonEC2Client extends events.EventEmitter
     else
       command = @_commands.shift()
       invoke @_options.endpoint, @_options.key, @_options.secret, command.name, command.parameters,
-        (response, body) =>
-          statusCode = Math.floor(response.statusCode / 100)
-          if command.callback || statusCode != 2
-            # Unfortunately, we cannot reuse the ResponseParser, since node-xml
-            # does not reset itself and offers tno reset function.
-            parser = new ResponseParser
-            parser.read body, (error, struct) =>
-              if error
-                @emit "error", error, null, response.statusCode
-                return
-              if statusCode == 2
-                try
-                  outcome = command.callback(struct)
-                catch _
-                  @emit "error",  _, response.statusCode
-                  return
-                if command.retry and !outcome
-                  @_commands.unshift command
-                  execute = () => @execute()
-                  setTimeout execute, 1000
-                else
-                  @execute()
-              else
-                console.log struct
-                @emit "error", null, struct, response.statusCode
+        (error, response, body) =>
+          if error
+            @emit "error", error
           else
-            @execute()
+            statusCode = Math.floor(response.statusCode / 100)
+            if command.callback || statusCode != 2
+              # Unfortunately, we cannot reuse the ResponseParser, since node-xml
+              # does not reset itself and offers tno reset function.
+              parser = new ResponseParser
+              parser.read body, (error, struct) =>
+                if error
+                  @emit "error", error, null, response.statusCode
+                  return
+                if statusCode == 2
+                  try
+                    outcome = command.callback(struct)
+                  catch _
+                    @emit "error",  _, response.statusCode
+                    return
+                  if command.retry and !outcome
+                    @_commands.unshift command
+                    execute = () => @execute()
+                    setTimeout execute, 1000
+                  else
+                    @execute()
+                else
+                  console.log struct
+                  @emit "error", null, struct, response.statusCode
+            else
+              @execute()
 
 module.exports.createClient = (options) ->
   return new AmazonEC2Client options
