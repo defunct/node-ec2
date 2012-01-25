@@ -10,13 +10,11 @@ pad = (n) -> if n < 10 then "0" + n else n
 # for the Amazon Query API request. The Amazon Query API will respond with an
 # error if the timestamp of the request is not in the last twenty minutes or so.
 timestamp = () ->
-  now       = new Date()
-  year      = now.getUTCFullYear()
-  month     = pad(now.getUTCMonth() + 1)
-  day       = pad(now.getUTCDate())
-  hours     = pad(now.getUTCHours())
-  minutes   = pad(now.getUTCMinutes())
-  "#{year}-#{month}-#{day}T#{hours}:#{minutes}:00Z"
+  now = new Date()
+  date = []
+  for part, i in "FullYear - Month - Date - Hours - Minutes :00Z".split /\s/
+    date.push if i % 2 then part else pad(now["getUTC#{part}"]())
+  date.join ""
 
 invoke = (endpoint, key, secret, command, parameters, callback) ->
   # The parameters common to all Amazon Query API requests as documented in
@@ -33,7 +31,7 @@ invoke = (endpoint, key, secret, command, parameters, callback) ->
   # Merge the request specific parameters with the common parameters.
   for key, value of parameters
     map[key] =
-      if typeof parameters[key] == 'function'
+      if typeof parameters[key] is "function"
         parameters[key]()
       else
         parameters[key]
@@ -44,9 +42,7 @@ invoke = (endpoint, key, secret, command, parameters, callback) ->
   # 
   # Here we sort the query parameter names and create an array of URL encoded
   # query name value pairs.
-  names = for key, value of map
-    key
-  names.sort()
+  names = (key for key, value of map).sort()
 
   query = []
   for name in names
@@ -81,7 +77,7 @@ invoke = (endpoint, key, secret, command, parameters, callback) ->
       response.on "data", (chunk) -> body += chunk
       response.on "end", () -> callback null, response, body
       response.on "error", (error) -> callback error
-  response.on "error", (error) -> callback error
+  request.on "error", (error) -> callback error
   request.end()
   true
 

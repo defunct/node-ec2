@@ -17,48 +17,90 @@ XML responses to JSON objects, there is no syntactic sugar. See Rationale.
 Here's an example using
 [RunInstances](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?ApiReference-query-RunInstances.html).
 
+```
+{ "key": "EXAMPLE"
+, "secret": "EXAMPLE"
+}
+```
+
 ```javascript
+// Require EC2.
 var ec2 = require("ec2");
 
-// Create an instance of the AmazonEC2Client.
-var client = ec2.createClient(
-{ key:      process.env["AWS_ACCESS_KEY_ID"]
-, secret:   process.env["AWS_SECRET_ACCESS_KEY"]
-});
+// Read in the configuration above.
+var configuration = JSON.parse(fs.readFileSync("configuration.json", "utf8"));
 
-// Track the progress of the API invocation in the lexical scope.
-var instanceId, 
-    reservationId;
+// Create an ec2 function that uses your configuration.
+ec2 = ec2(configuration)
 
-// Call the "RunInstances" action to create a new EC2 instance. The Amazon Query
-// API call will return immediately, but the instance will take a while to boot.
-client.call("RunInstances", {
+// Run an instance and wait for it to become ready.
+ec2("RunInstances", {
   ImageId: "ami-2d4aa444", KeyName: "launch_key"
-}, function (response) {
+}, function (error, response) {
+  if (error) {
+    throw error
+  }
   reservationId   = response.reservationId;
   instanceId      = response.instancesSet[0].instanceId;
+  ready = function () {
+    ec2("DescribeInstances", function (error, struct) {
+      if (error) {
+        throw error;
+      }
+      var reservation = struct.reservationSet.filter(function (reservation) {
+        return reservation.reservationId == reservationId;
+      })[0];
+      var instance = reservation.instancesSet.filter(function (instance) {
+        return instance.instanceId == instanceId;
+      })[0];
+      return instance.instanceState.name == "running";
+      if (instance.instanceState.name == "running") {
+        console.log("Instance created with id: " + instanceId);
+      } else {
+        setTimeout(ready, 500);
+      }
+    });
+  };
+  ready();
 });
+```
+
+```
+// Require EC2.
+var ec2 = require("ec2");
+
+// Read in the configuration above.
+var configuration = JSON.parse(fs.readFileSync("configuration.json", "utf8"));
+
+// Create an ec2 function that uses your configuration.
+ec2 = ec2(configuration)
+
+var response = ec2("RunInstances", {
+  ImageId: "ami-2d4aa444", KeyName: "launch_key"
+}, _);
+
+var reservationId   = response.reservationId;
+var instanceId      = response.instancesSet[0].instanceId;
+var duration        = 0;
 
 // Therefore, we poll the  "DescribeInstances" action, calling it once every
 // second until the instance state indicates that it is running.
-client.poll("DescribeInstances", function (struct) {
+for (;;) {
+  response = ec2("DescribeInstances", _);   
   var reservation = struct.reservationSet.filter(function (reservation) {
     return reservation.reservationId == reservationId;
   })[0];
   var instance = reservation.instancesSet.filter(function (instance) {
     return instance.instanceId == instanceId;
   })[0];
-  return instance.instanceState.name == "running";
-});
+  if (instance.instanceState.name == "running") {
+    break;
+  }
+  setTimeout(_, 500);
+}
 
-// When all of the Amazon Query API calls and polls complete, we know that our
-// Amazon EC2 instance is ready for use.
-client.on("end", function () {
-  console.log("Instance created with id: " + instanceId);
+client.poll("DescribeInstances", function (struct) {
 });
-
-// Run the trasaction described above.
-client.execute();
 ```
 ## Installing
 
