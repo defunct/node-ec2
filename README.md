@@ -1,19 +1,19 @@
-NODE EC2
+# NODE EC2 [![Build Status](https://secure.travis-ci.org/bigeasy/node-ec2.png?branch=master)](http://travis-ci.org/bigeasy/node-ec2)
 
 Evended Node.js bindings to the EC2 Query API.
 
-    Home: http://bigeasy.github.com/node-ec2
-    Source: http://github.com/bigeasy/node-ec2
-    Documentation: http://github.com/bigeasy/node-ec2/wiki
+ * Home: http://bigeasy.github.com/node-ec2
+ * Source: http://github.com/bigeasy/node-ec2
+ * Documentation: http://github.com/bigeasy/node-ec2/wiki
 
-    Health: http://travis-ci.org/bigeasy/node-ec2
+ * Health: http://travis-ci.org/bigeasy/node-ec2
 
-    Discuss: http://groups.google.com/group/nodejs
-    Issues: http://github.com/bigeasy/node-ec2/issues
+ * Discuss: http://groups.google.com/group/nodejs
+ * Issues: http://github.com/bigeasy/node-ec2/issues
 
-    License: The MIT License
+ * License: The MIT License
 
-PURPOSE
+## Purpose
 
 Launch Amazon EC2 instances from Node.js and execute callbacks when the
 instances are available.
@@ -27,4 +27,3 @@ node-ec2 applications.
 You can learn more about node-ec2 at the node-ec2 GitHub web page and by reading
 the wiki.
 
-<iframe src="http://bigeasy.github.com/node-ec2"></iframe>
