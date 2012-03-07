@@ -6,9 +6,7 @@ Evended Node.js bindings to the EC2 Query API.
     Source: http://github.com/bigeasy/node-ec2
     Documentation: http://github.com/bigeasy/node-ec2/wiki
 
-    Health: https://github.com/bigeasy/node-ec2
-
-    https://secure.travis-ci.org/bigeasy/node-ec2.png?branch=master
+    Health: http://travis-ci.com/bigeasy/node-ec2
 
     Discuss: http://groups.google.com/group/nodejs
     Issues: http://github.com/bigeasy/node-ec2/issues
