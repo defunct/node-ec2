@@ -26,7 +26,6 @@ amazon = (options, splat) ->
     when 3, 4
       { endpoint, key, secret } = options
       invoke endpoint, key, secret, name, parameters, (error, response, body) ->
-        console.log body
         if error
           callback error
         else
@@ -35,6 +34,15 @@ amazon = (options, splat) ->
             # We cannot reuse the ResponseParser, since node-xml does not reset
             # itself and offers tno reset function.
             (new ResponseParser).read(body, callback)
+          else if body
+            (new ResponseParser).read body, (error, object) ->
+              if (error)
+                callback new Error(http.STATUS_CODES[response.statusCode])
+              else
+                error = new Error(object.Errors[0].Message)
+                error.code = object.Errors[0].Code
+                error.status = statusCode
+                callback error
           else
             callback new Error(http.STATUS_CODES[response.statusCode])
 
