@@ -26,6 +26,7 @@ amazon = (options, splat) ->
     when 3, 4
       { endpoint, key, secret } = options
       invoke endpoint, key, secret, name, parameters, (error, response, body) ->
+        console.log body
         if error
           callback error
         else
@@ -37,4 +38,4 @@ amazon = (options, splat) ->
           else
             callback new Error(http.STATUS_CODES[response.statusCode])
 
-module.exports = amazon({}, {})
+module.exports = amazon({}, [ {} ])

@@ -1,5 +1,7 @@
 {   "name":             "ec2"
-,   "version":          "0.0.11"
+,   "description" :     "Amazon AWS minified"
+,   "keywords" :        ["aws", "ec2", "amazon"]
+,   "version":          "0.0.12"
 ,   "author":           "Alan Gutierrez"
 ,   "directories":      { "lib" : "./lib" }
 ,   "main":             "./lib/amazon"
@@ -7,4 +9,10 @@
 ,   "dependencies":
     {   "node-xml": ">=1.0.0"
     }
+,   "devDependencies":
+    { "coffee-script": ">=1.1.3"
+    , "ace.is.aces.in.my.book": ">=0.0.3" }
+, "lib" : "lib"
+, "scripts" : { "test": "ace t/repsonse/error.t.coffee" }
+, "engines" : { "node": "> 0.6.0" }
 }

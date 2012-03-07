@@ -12,8 +12,12 @@ pad = (n) -> if n < 10 then "0" + n else n
 timestamp = () ->
   now = new Date()
   date = []
-  for part, i in "FullYear - Month - Date - Hours - Minutes :00Z".split /\s/
-    date.push if i % 2 then part else pad(now["getUTC#{part}"]())
+  offset = { Month: 1 }
+  for part, i in "FullYear - Month - Date T Hours : Minutes :00Z".split /\s/
+    date.push if i % 2
+      part
+    else
+      pad(now["getUTC#{part}"]() + (offset[part] or 0))
   date.join ""
 
 invoke = (endpoint, key, secret, command, parameters, callback) ->
