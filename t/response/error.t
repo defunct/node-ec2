@@ -1,5 +1,5 @@
 #!/usr/bin/env _coffee
-require("./harness") 1, ({ parse }, _) ->
+require("./proof") 1, ({ parse }, _) ->
   object = parse "Errors", _
   expected =
     Errors: [ { Code: 'MissingParameter', Message: 'The request must contain the parameter MinCount' } ]
