@@ -1,0 +1,99 @@
+#!/usr/bin/env node
+(function() {
+  var argv, build, client, command, configuration, display, ec2, file, format, fs, key, labels, match, parameters, parse, rest, _ref;
+  fs = require("fs");
+  ec2 = require("ec2");
+  argv = process.argv.slice(2);
+  command = argv.shift();
+  parameters = {};
+  while (argv.length) {
+    key = argv.shift();
+    if (match = /^\s*\+(.*)/.exec(key)) {
+      format = match[1];
+    } else {
+      parameters[key] = argv.shift();
+    }
+  }
+  build = function(fields, child) {
+    return function(lines, line, context) {
+      var copy, field, item, n, _i, _len, _len2, _results;
+      _results = [];
+      for (_i = 0, _len = context.length; _i < _len; _i++) {
+        item = context[_i];
+        copy = line.slice(0);
+        for (n = 0, _len2 = fields.length; n < _len2; n++) {
+          field = fields[n];
+          if (child && n === fields.length - 1) {
+            child(lines, copy, item[field]);
+          } else {
+            copy.push(item[field]);
+          }
+        }
+        _results.push(!child ? lines.push(copy) : void 0);
+      }
+      return _results;
+    };
+  };
+  parse = function(labels, rest, nested) {
+    var child, field, fields, label, proc, _ref, _ref2, _ref3;
+    fields = [];
+    while (!proc) {
+      if (nested && (match = /^\s*\](.*)$/.exec(rest))) {
+        rest = match[1];
+        proc = build(fields, null);
+      } else {
+        match = /^\s*(\w[\w\d]*)(.*)$/.exec(rest);
+        if (!match) {
+          throw new Error("invalid pattern");
+        }
+        _ref = match.slice(1), field = _ref[0], rest = _ref[1];
+        label = field;
+        if (match = /^\[(.*)$/.exec(rest)) {
+          fields.push(field);
+          _ref2 = parse(labels, match[1], true), child = _ref2[0], rest = _ref2[1];
+          proc = build(fields, child);
+        } else {
+          if (match = /^\/(\w[\w\d]*)$/.exec(rest)) {
+            _ref3 = match.slice(1), label = _ref3[0], rest = _ref3[1];
+          }
+          labels.push(label);
+          fields.push(field);
+          rest = rest.replace(/^\s*,/, '');
+        }
+      }
+    }
+    return [proc, rest];
+  };
+  labels = [];
+  if (format) {
+    _ref = parse(labels, format), display = _ref[0], rest = _ref[1];
+    if (rest && rest.trim().length !== 0) {
+      throw new Error("invalid pattern.");
+    }
+  }
+  file = process.env["AWS_CONFIG"] || ("" + process.env["HOME"] + "/.aws");
+  configuration = JSON.parse(fs.readFileSync(file, "utf8"));
+  client = ec2.createClient(configuration);
+  client.on("error", function(error) {
+    console.log("error", error);
+    throw error;
+  });
+  client.call(command, parameters, function(response) {
+    var line, lines, _i, _len, _results;
+    if (display) {
+      lines = [];
+      display(lines, [], [response]);
+      _results = [];
+      for (_i = 0, _len = lines.length; _i < _len; _i++) {
+        line = lines[_i];
+        process.stdout.write(line.join(" "));
+        _results.push(process.stdout.write("\n"));
+      }
+      return _results;
+    } else {
+      process.stdout.write(JSON.stringify(response, null, 2));
+      return process.stdout.write("\n");
+    }
+  });
+  client.execute();
+}).call(this);
