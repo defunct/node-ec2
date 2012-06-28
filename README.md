@@ -1,6 +1,6 @@
 # Node EC2 [![Build Status](https://secure.travis-ci.org/bigeasy/node-ec2.png?branch=master)](http://travis-ci.org/bigeasy/node-ec2)
 
-Evended Node.js bindings to the EC2 Query API.
+Evented Node.js bindings to the EC2 Query API.
 
  * **Node EC2** is a minimal Node.js API with a pinch of sugar.
  * **Node EC2** creates a signed request from a AWS EC command name a plain old
@@ -15,29 +15,6 @@ Because **Node EC2** is such a thin layer over the Amazon AWS EC2 API you can
 use the [Amazon API
 Reference](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?query-apis.html)
 to find your way around. Node EC2 calls translate directly to Amazon Query API.
-
-### Why So Simple?
-
-Another implementation might set out to define a library of functions, one for
-each function provided by the AWS EC2 API. This way, you could validate the
-command name and parameters before you call.
-
-We believe that if there's something wrong with your request, you'll find out
-soon enough. The Amazon AWS endpoint will do a bang up job of checking for
-errors, and will be able to do all the error checking in one place.
-
-On the client side, we could validate parameter names, but on the AWS site
-validation goes beyond semantics to authorization, service availability, etc.
-
-If the Amazon AWS EC2 API adds a dozen new features overnight, you don't have to
-wait for a new version of **Node EC2** to use them.
-
-Becasue of this, there is a one to one mapping between the Amazon Query API and
-the actions provided by node-ec2 and changes to the Amazon Query API are
-available immediately to node-ec2 applications.
-
-You can learn more about node-ec2 at the node-ec2 GitHub web page and by reading
-the wiki.
 
 ### Synopsis
 
@@ -144,7 +121,7 @@ Options to the ec2 function are:
  * `endpoint` &mdash; Either the region identifier or else the fully qualified
    domain name of the AWS server.
 
-The region identfiers are one of the following.
+The region identifiers are one of the following.
 
  * `us-west-2` &mdash; Oregon.
  * `us-west-1` &mdash; California.
@@ -231,6 +208,29 @@ ec2east("RunInstances", parameters, function (error, eastern) {
   });
 });
 ```
+
+### Why So Simple?
+
+Another implementation might set out to define a library of functions, one for
+each function provided by the AWS EC2 API. This way, you could validate the
+command name and parameters before you call.
+
+We believe that if there's something wrong with your request, you'll find out
+soon enough. The Amazon AWS endpoint will do a bang up job of checking for
+errors, and will be able to do all the error checking in one place.
+
+On the client side, we could validate parameter names, but on the AWS site
+validation goes beyond semantics to authorization, service availability, etc.
+
+If the Amazon AWS EC2 API adds a dozen new features overnight, you don't have to
+wait for a new version of **Node EC2** to use them.
+
+Because of this, there is a one to one mapping between the Amazon Query API and
+the actions provided by **Node EC2**. Changes to the Amazon Query API are
+available immediately to **Node EC2** applications.
+
+You can learn more about node-ec2 at the node-ec2 GitHub web page and by reading
+the wiki.
 
 ## Command Line Interface
 
