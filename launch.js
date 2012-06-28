@@ -13,7 +13,7 @@ ec2 = ec2(configuration)
 
 // Run an instance and wait for it to become ready.
 ec2("RunInstances", {
-  ImageId: "ami-2d4aa444", KeyName: "syntechdev_aws_key", MinCount: 1, MaxCount: 1
+  ImageId: "ami-2d4aa444", KeyName: "launch_key", MinCount: 1, MaxCount: 1
 }, running);
 
 
