@@ -36,72 +36,35 @@ ec2 = ec2(configuration)
 // Run an instance and wait for it to become ready.
 ec2("RunInstances", {
   ImageId: "ami-2d4aa444", KeyName: "launch_key"
-}, function (error, response) {
-  if (error) {
-    throw error
-  }
-  reservationId   = response.reservationId;
-  instanceId      = response.instancesSet[0].instanceId;
-  ready = function () {
-    ec2("DescribeInstances", function (error, struct) {
-      if (error) {
-        throw error;
-      }
-      var reservation = struct.reservationSet.filter(function (reservation) {
-        return reservation.reservationId == reservationId;
-      })[0];
-      var instance = reservation.instancesSet.filter(function (instance) {
-        return instance.instanceId == instanceId;
-      })[0];
-      return instance.instanceState.name == "running";
-      if (instance.instanceState.name == "running") {
-        console.log("Instance created with id: " + instanceId);
-      } else {
-        setTimeout(ready, 500);
-      }
-    });
-  };
-  ready();
-});
-```
+}, running);
 
-```
-// Require EC2.
-var ec2 = require("ec2");
 
-// Read in the configuration above.
-var configuration = JSON.parse(fs.readFileSync("configuration.json", "utf8"));
+var reservationId, instanceId;
+function running (error, response) {
+  if (error) throw error;
+  reservationId = response.reservationId
+  instanceId = response.instancesSet[0].instanceId;
+  ec2("DescribeInstances", starting);
+}
 
-// Create an ec2 function that uses your configuration.
-ec2 = ec2(configuration)
-
-var response = ec2("RunInstances", {
-  ImageId: "ami-2d4aa444", KeyName: "launch_key"
-}, _);
-
-var reservationId   = response.reservationId;
-var instanceId      = response.instancesSet[0].instanceId;
-var duration        = 0;
-
-// Therefore, we poll the  "DescribeInstances" action, calling it once every
-// second until the instance state indicates that it is running.
-for (;;) {
-  response = ec2("DescribeInstances", _);   
-  var reservation = struct.reservationSet.filter(function (reservation) {
+function starting (error, response) {
+  if (error) throw error;
+  var reservation = response.reservationSet.filter(function (reservation) {
     return reservation.reservationId == reservationId;
   })[0];
   var instance = reservation.instancesSet.filter(function (instance) {
     return instance.instanceId == instanceId;
   })[0];
+  if (instance.instanceState.name == "running") ready();
+  else setTimeout(starting, 2500);
   if (instance.instanceState.name == "running") {
-    break;
-  }
-  setTimeout(_, 500);
-}
-
-client.poll("DescribeInstances", function (struct) {
 });
+
+function ready () {
+  console.log("Instance created with id: " + instanceId);
+}
 ```
+
 ## Installing
 
 The easiest way to install is using npm.
@@ -110,15 +73,12 @@ The easiest way to install is using npm.
 npm install ec2
 ```
 
-You can also checkout the source code for incusion in your `NODE_PATH` using
-`git`. 
+You can also checkout the source code for using `git`. It has only one
+dependency, the wonderful little XML parser `node-xml`.
 
 ## Reference
 
-@ ec2
-
-Node EC2 exports the ec2 namespace, which includes a single factory method to
-crate the Amazon EC2 Query API client object.
+Node EC2 exports a function you can use to build an EC2 function.
 
 ```javascript
 var ec2 = require("ec2");
