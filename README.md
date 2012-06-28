@@ -132,9 +132,8 @@ var ec2 = require("ec2")({ key: "<REDACTED>", secret: "<REDACTED>" });
 
 ec2("DescribeInstances", {}, function (error, result) {
   if (error) throw error;
-  console.log(reuslt)
+  console.log(result)
 });
-
 ```
 
 Options to the ec2 function are:
@@ -154,3 +153,177 @@ The region identfiers are one of the following.
  * `ap-northeast-1` &mdash; Tokyo.
  * `ap-southeast-1` &mdash; Singapore.
  * `eu-west-1` &mdash; Ireland.
+
+If you do not specify `endpoint` when you construct your `ec2` function, you can
+specify it later when you construct your `ec2` function.
+
+### Invocation
+
+Invoke **Node EC2** by passing a command name, command parameters in an object,
+and a callback.
+
+```javascript
+var ec2 = require("ec2")({ key: "<REDACTED>"
+                         , secret: "<REDACTED>"
+                         , endpoint: "us-east-1"
+                         })
+  , parameters;
+
+parameters =
+{ ImageId: "ami-2d4aa444"
+, KeyName: "launch_key"
+, MinCount: 1
+, MaxCount: 1
+};
+
+ec2("RunInstances", parameters, function (error, result) {
+  if (error) throw error;
+  console.log(result)
+});
+```
+
+You can override configuration details by passing an options object as the first
+argument to the **Node EC2** function.
+
+```javascript
+var ec2 = require("ec2")({ key: "<REDACTED>"
+                         , secret: "<REDACTED>"
+                         , endpoint: "us-east-1"
+                         })
+  , parameters;
+
+parameters =
+{ ImageId: "ami-e269e5d2"
+, KeyName: "launch_key"
+, MinCount: 1
+, MaxCount: 1
+};
+
+ec2({ endpoint: "us-west-2" }, "RunInstances", parameters, function (error, result) {
+  if (error) throw error;
+  console.log(result)
+});
+```
+
+You can also create a new **Node EC2** function that extends configuration of an
+**Node EC2** function. You can use this to create a base function that holds
+your credentials, and specific functions for the specific regions.
+
+```javascript
+var ec2 = require("ec2")({ key: "<REDACTED>" , secret: "<REDACTED>" })
+  , ec2east = ec2({ endpoint: "us-east-1" })
+  , ec2west = ec2({ endpoint: "us-west-2" })
+  , parameters
+  ;
+
+parameters =
+{ ImageId: "ami-e269e5d2"
+, KeyName: "launch_key"
+, MinCount: 1
+, MaxCount: 1
+};
+
+ec2east("RunInstances", parameters, function (error, eastern) {
+  if (error) throw error;
+  parameters.ImageId = "ami-e269e5d2";
+  ec2west("RunInstances", parameters, function (error, western) {
+    console.log(eastern, western);
+  });
+});
+```
+
+## Command Line Interface
+
+**Node EC2** also comes with a command line interface. The command line
+interface is very helpful if you want to examine the JSON results of an Amazon
+AWS EC2 API call.
+
+The `ec2` program will look for a configuration file at `~/.aws` or else use the
+value of the `AWS_CONFIG` environment variable as the path to the configuration
+file. The configuration file is the JSON file used to create a **Node EC2**
+function described above. It contains your key, secret key and the service
+endpoint.
+
+```
+$ ec2 DescribeInstances > instances.txt
+{
+  "requestId": "1d42624e-a3c8-4dca-8d42-6ac0a11f4468",
+  "keySet": [
+    {
+      "keyName": "automation_key",
+      "keyFingerprint": "82:a4:69:ca:89:31:8f:58:75:ae:24:eb:e5:71:78:56:32:09:3a:24"
+    },
+    {
+      "keyName": "temporary_key",
+      "keyFingerprint": "c0:14:ff:06:23:dd:52:6a:4d:29:e9:0f:1f:54:13:73:e1:c8:fd:90"
+    },
+    {
+      "keyName": "launch_key",
+      "keyFingerprint": "8c:cf:71:0d:84:05:19:cd:7d:89:ca:62:7e:8f:51:0b:16:df:f4:c0"
+    }
+  ]
+}
+```
+
+Invocation is first the command name, then command arguments just as they appear
+in the Amazon AWS API. Note that some arguments in the API require a number
+appended to the argument name.
+
+```
+$ ec2 RunInstances ImageId ami-08d97e61 KeyName launch_key MinCount 1 MaxCount 1
+{
+  "requestId": "7aa586a5-c658-4735-9152-72ad20cb3282",
+  "reservationId": "r-de7200bb",
+  "ownerId": "341264201128",
+  "groupSet": [
+    {
+      "groupId": "sg-b0069ad9",
+      "groupName": "default"
+    }
+  ],
+  "instancesSet": [
+    {
+      "instanceId": "i-2af0e253",
+      "imageId": "ami-08d97e61",
+      "instanceState": {
+        "code": "0",
+        "name": "pending"
+      },
+      "privateDnsName": null,
+      "dnsName": null,
+      "reason": null,
+      "keyName": "launch_key",
+      "amiLaunchIndex": "0",
+      "productCodes": null,
+      "instanceType": "m1.small",
+      "launchTime": "2012-06-28T18:29:55.000Z",
+      "placement": {
+        "availabilityZone": "us-east-1a",
+        "groupName": null,
+        "tenancy": "default"
+      },
+      "kernelId": "aki-407d9529",
+      "monitoring": {
+        "state": "disabled"
+      },
+      "groupSet": [
+        {
+          "groupId": "sg-c8f72da7",
+          "groupName": "default"
+        }
+      ],
+      "stateReason": {
+        "code": "pending",
+        "message": "pending"
+      },
+      "architecture": "i386",
+      "rootDeviceType": "ebs",
+      "rootDeviceName": "/dev/sda1",
+      "blockDeviceMapping": null,
+      "virtualizationType": "paravirtual",
+      "clientToken": null,
+      "hypervisor": "xen"
+    }
+  ]
+}
+```
