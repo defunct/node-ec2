@@ -1,7 +1,7 @@
 {   "name":             "ec2"
 ,   "description" :     "Amazon AWS minified."
 ,   "keywords" :        ["aws", "ec2", "amazon"]
-,   "version":          "0.1.0"
+,   "version":          "0.1.1"
 ,   "author":           "Alan Gutierrez"
 ,   "directories":      { "lib" : "./lib" }
 ,   "main":             "./lib/amazon"
