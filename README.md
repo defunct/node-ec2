@@ -58,18 +58,21 @@ ready to use. When it's read it prints the TK host name for use with `ssh`.
 
 ```javascript
 // Require EC2.
-var ec2 = require("ec2");
+var ec2 = require("ec2")
+  , fs = require("fs")
+  , path = require("path")
+  , configuration = path.resolve(process.env.HOME, ".aws")
+  ;
 
 // Read in the configuration above.
-var configuration = JSON.parse(fs.readFileSync("configuration.json", "utf8"));
-configuration.endpoint = "us-east-1";
+var configuration = JSON.parse(fs.readFileSync(configuration, "utf8"));
 
 // Create an ec2 function that uses your configuration.
 ec2 = ec2(configuration)
 
 // Run an instance and wait for it to become ready.
 ec2("RunInstances", {
-  ImageId: "ami-2d4aa444", KeyName: "launch_key"
+  ImageId: "ami-2d4aa444", KeyName: "launch_key", MinCount: 1, MaxCount: 1
 }, running);
 
 
@@ -78,26 +81,34 @@ function running (error, response) {
   if (error) throw error;
   reservationId = response.reservationId
   instanceId = response.instancesSet[0].instanceId;
-  ec2("DescribeInstances", starting);
+  describe();
+}
+
+function describe () {
+  ec2("DescribeInstances", {}, starting);
 }
 
 function starting (error, response) {
   if (error) throw error;
-  var reservation = response.reservationSet.filter(function (reservation) {
+  var reservation, instance;
+  reservation = response.reservationSet.filter(function (reservation) {
     return reservation.reservationId == reservationId;
   })[0];
-  var instance = reservation.instancesSet.filter(function (instance) {
+  instance = reservation.instancesSet.filter(function (instance) {
     return instance.instanceId == instanceId;
   })[0];
   if (instance.instanceState.name == "running") ready();
-  else setTimeout(starting, 2500);
-  if (instance.instanceState.name == "running") {
-});
+  else setTimeout(describe, 2500);
+}
 
 function ready () {
   console.log("Instance created with id: " + instanceId);
 }
 ```
+
+I'm afraid you'll find that working with Amazon AWS is a bit wordy. The XML
+documents seem to gravitate toward the longest possible element name that could
+possibly describe the property
 
 ## Installing
 
@@ -110,74 +121,36 @@ npm install ec2
 You can also checkout the source code for using `git`. It has only one
 dependency, the wonderful little XML parser `node-xml`.
 
-## Reference
+### Construction
 
-Node EC2 exports a function you can use to build an EC2 function.
+Node EC2 exports a function you can use to build an EC2 function. You can call
+it directly from `require("ec2")` to build an `ec2` function configured for your
+application.
 
 ```javascript
-var ec2 = require("ec2");
+var ec2 = require("ec2")({ key: "<REDACTED>", secret: "<REDACTED>" });
+
+ec2("DescribeInstances", {}, function (error, result) {
+  if (error) throw error;
+  console.log(reuslt)
+});
+
 ```
-function: createClient
 
-Creates an {{AmazonEC2Client}} object for use in 
+Options to the ec2 function are:
 
-class: AmazonEC2Client
+ * `key` &mdash; Your Amazon AWS key.
+ * `secret` &mdash; Your Amazon AWS secret key, which you should always keep
+   secret.
+ * `endpoint` &mdash; Either the region identifier or else the fully qualified
+   domain name of the AWS server.
 
-Communicates with the Amazon Query API.
+The region identfiers are one of the following.
 
-function: call
-
-  parameter: name
-
-  The Amazon EC2 Query API action to perform.
-
-  parameter: parameters optional
-
-  Named parameters for the Amazon EC2 Query API action.
-
-  parameter: callback   optional
-
-  A callback function that is called with JSON object containing the Amazon EC2
-  Query API repsonse when the Amazon EC2 Query API action completes.
-
-Call an Amazon Query API action.
-
-function: poll
-
-  parameter: name
-
-  The Amazon EC2 Query API action to perform.
-
-  parameter: parameters optional
-
-  Named parameters for the Amazon EC2 Query API action.
-
-  parameter: callback   optional
-
-  A callback function that is called with JSON object containing the Amazon EC2
-  Query API repsonse when the Amazon EC2 Query API action completes. If the
-  callback function returns `false` the query is performed again.
-
-Call an Amazon Query API action while a condition is false.
-
-function: execute
-
-Run the query.
-
-event: error
-
-  parameter: error
-
-  The error response structure.
-
-  parameter: statusCode
-
-  The HTTP status code for the error response.
-
-Called when there is any error, both network errors, and exceptions thrown by
-callbacks, so that you have a chance to release instances if things go wrong.
-
-
-event: end
-
-Called when all queries have completed successfully.
+ * `us-west-2` &mdash; Oregon.
+ * `us-west-1` &mdash; California.
+ * `us-east-1` &mdash; Virginia.
+ * `sa-east-1` &mdash; Sao Paluo.
+ * `ap-northeast-1` &mdash; Tokyo.
+ * `ap-southeast-1` &mdash; Singapore.
+ * `eu-west-1` &mdash; Ireland.
