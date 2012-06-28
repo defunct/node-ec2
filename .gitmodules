@@ -1,3 +1,0 @@
-[submodule "master"]
-	path = master
-	url = git://github.com/bigeasy/node-ec2.git
