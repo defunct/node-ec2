@@ -8,7 +8,7 @@ JavaScript object of command parameters.
  * **Node EC2** parses the XML response and converts it into JSON.
  * **Node EC2** does **not** define control flow, so use your favorite control flow
 library.
- * **Node EC** let's Amazon AWS do all the error checking in one place, then
+ * **Node EC2** lets Amazon AWS do all the error checking in one place, then
    returns the errors as an `Error` to a Node.js style callback.
 
 Because **Node EC2** is such a thin layer over the Amazon AWS EC2 API you can
@@ -277,7 +277,7 @@ $ ec2 RunInstances ImageId ami-08d97e61 KeyName launch_key MinCount 1 MaxCount 1
   "ownerId": "341264201128",
   "groupSet": [
     {
-      "groupId": "sg-b0069ad9",
+      "groupId": "sg-c8f72da7",
       "groupName": "default"
     }
   ],
