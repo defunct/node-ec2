@@ -204,6 +204,7 @@ ec2east("RunInstances", parameters, function (error, eastern) {
   if (error) throw error;
   parameters.ImageId = "ami-e269e5d2";
   ec2west("RunInstances", parameters, function (error, western) {
+    if (error) throw error;
     console.log(eastern, western);
   });
 });
