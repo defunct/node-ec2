@@ -10,7 +10,7 @@
     {   "node-xml": ">=1.0.0"
     }
 ,   "devDependencies":
-    { "proof": "0.0.7" }
+    { "proof": "0.0.8" }
 , "lib" : "lib"
 , "scripts" : { "test": "proof t/*/*.t" }
 , "engines" : { "node": "> 0.6.0" }
