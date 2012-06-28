@@ -217,8 +217,9 @@ each function provided by the AWS EC2 API. This way, you could validate the
 command name and parameters before you call.
 
 We believe that if there's something wrong with your request, you'll find out
-soon enough. The Amazon AWS endpoint will do a bang up job of checking for
-errors, and will be able to do all the error checking in one place.
+soon enough. The Amazon AWS server that handles your request will do a bang up
+job of error checking, and it will be able to do all the error checking in one
+place.
 
 On the client side, we could validate parameter names, but on the AWS site
 validation goes beyond semantics to authorization, service availability, etc.
@@ -246,7 +247,7 @@ function described above. It contains your key, secret key and the service
 endpoint.
 
 ```
-$ ec2 DescribeInstances > instances.txt
+$ ec2 DescribeKeyPairs
 {
   "requestId": "1d42624e-a3c8-4dca-8d42-6ac0a11f4468",
   "keySet": [
