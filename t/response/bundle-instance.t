@@ -20,5 +20,5 @@ require("./proof")(1, function (parse, callback) {
       }
     }
   };
-  deepEqual(expected, object, "parse bundle instance");
+  deepEqual(object, expected, "parse bundle instance");
 });

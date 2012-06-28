@@ -10,5 +10,5 @@ require("./proof")(1, function (parse, callback) {
   , status: "attaching"
   , attachTime: new Date(Date.UTC(2008, 4, 7, 11, 51, 50))
   };
-  deepEqual(expected, object, "parse attach volume");
+  deepEqual(object, expected, "parse attach volume");
 });

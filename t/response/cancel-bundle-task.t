@@ -19,6 +19,6 @@ require("./proof")(1, function (parse, callback) {
       }
     }
   };
-  deepEqual(expected, object, "parse cancel bundle task");
+  deepEqual(object, expected, "parse cancel bundle task");
 });
 

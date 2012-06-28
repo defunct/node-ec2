@@ -4,5 +4,5 @@ require("./proof")(1, function (parse, callback) {
   parse("DeleteKeyPair", callback("object"));
 }, function (object, deepEqual) {
   var expected = { "return": true };
-  deepEqual(expected, object, "parse delete key pair");
+  deepEqual(object, expected, "parse delete key pair");
 });

@@ -13,6 +13,6 @@ require("./proof")(1, function (parse, callback) {
   , ownerId: "213457642086"
   , description: "Daily Backup"
   };
-  deepEqual(expected, object, "parse create snapshot");
+  deepEqual(object, expected, "parse create snapshot");
 });
 

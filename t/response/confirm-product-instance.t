@@ -7,5 +7,5 @@ require("./proof")(1, function (parse, callback) {
   { ownerId: "254933287430"
   , "return": true
   };
-  deepEqual(expected, object, "parse confirm product instance");
+  deepEqual(object, expected, "parse confirm product instance");
 });

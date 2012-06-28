@@ -11,6 +11,6 @@ require("./proof")(1, function (parse, callback) {
   , availabilityZone: "us-east-1a"
   , snapshotId: null
   };
-  deepEqual(expected, object, "parse create volume");
+  deepEqual(object, expected, "parse create volume");
 });
 

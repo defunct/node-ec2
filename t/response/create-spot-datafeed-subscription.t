@@ -11,6 +11,6 @@ require("./proof")(1, function (parse, callback) {
     , state: "open"
     }
   };
-  deepEqual(expected, object, "parse create spot datafeed subscription");
+  deepEqual(object, expected, "parse create spot datafeed subscription");
 });
 

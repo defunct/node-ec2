@@ -7,5 +7,5 @@ require("./proof")(1, function (parse, callback) {
   { requestId: "59dbff89-35bd-4eac-99ed-be587ed81825"
   , spotInstanceRequestSet: [ { spotInstanceRequestId: 'sir-e95fae02', state: "cancelled" } ]
   };
-  deepEqual(expected, object, "parse cancel spot instance requests");
+  deepEqual(object, expected, "parse cancel spot instance requests");
 });

@@ -7,5 +7,5 @@ require("./proof")(1, function (parse, callback) {
   { requestId: "d4904fd9-82c2-4ea5-adfe-a9cc3EXAMPLE"
   , "return": true
   };
-  deepEqual(expected, object, "parse create placement group");
+  deepEqual(object, expected, "parse create placement group");
 });
