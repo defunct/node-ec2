@@ -16,7 +16,7 @@ use the [Amazon API
 Reference](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?query-apis.html)
 to find your way around. Node EC2 calls translate directly to Amazon Query API.
 
-### Synopsis
+## Synopsis
 
 An example using
 [RunInstances](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?ApiReference-query-RunInstances.html) to launch a 32-bit Fedora 17 instance in Virginia.
@@ -98,7 +98,7 @@ npm install ec2
 You can also checkout the source code for using `git`. It has only one
 dependency, the wonderful little XML parser `node-xml`.
 
-### Construction
+## Initialization
 
 Node EC2 exports a function you can use to build an EC2 function. You can call
 it directly from `require("ec2")` to build an `ec2` function configured for your
@@ -134,7 +134,7 @@ The region identifiers are one of the following.
 If you do not specify `endpoint` when you construct your `ec2` function, you can
 specify it later when you construct your `ec2` function.
 
-### Invocation
+## Invocation
 
 Invoke **Node EC2** by passing a command name, command parameters in an object,
 and a callback.
@@ -210,15 +210,16 @@ ec2east("RunInstances", parameters, function (error, eastern) {
 });
 ```
 
-### Why So Simple?
+## Why So Simple?
 
 Another implementation might set out to define a library of functions, one for
 each function provided by the AWS EC2 API. This way, you could validate the
 command name and parameters before you call.
 
 We believe that if there's something wrong with your request, you'll find out
-soon enough. The Amazon AWS endpoint will do a bang up job of checking for
-errors, and will be able to do all the error checking in one place.
+soon enough. The Amazon AWS server that handles your request will do a bang up
+job of error checking, and it will be able to do all the error checking in one
+place.
 
 On the client side, we could validate parameter names, but on the AWS site
 validation goes beyond semantics to authorization, service availability, etc.
@@ -246,7 +247,7 @@ function described above. It contains your key, secret key and the service
 endpoint.
 
 ```
-$ ec2 DescribeInstances > instances.txt
+$ ec2 DescribeKeyPairs
 {
   "requestId": "1d42624e-a3c8-4dca-8d42-6ac0a11f4468",
   "keySet": [
@@ -328,3 +329,20 @@ $ ec2 RunInstances ImageId ami-08d97e61 KeyName launch_key MinCount 1 MaxCount 1
   ]
 }
 ```
+
+## Change Log
+
+Changes for each release since 0.1.1.
+
+### Version 0.1.1 &mdash; 
+
+ * Publish a version without junk directories that defeat NPM. #9. #23.
+ * Create change log. #13.
+ * Specify fully qualified hostname for endpoint. #25. #3
+ * Rewrite `README.md` to describe one function API.
+ * Delete `Cakefile`. #16.
+ * Convert to JavaScript. #10.
+
+Versions prior to 0.1.1 were not tracked very well in `git`. My fault, but I'm
+not feeling the guilt necessary to perform the `git` forensics necessary to
+reconstruct a change log.
