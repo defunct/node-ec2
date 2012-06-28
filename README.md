@@ -2,17 +2,14 @@
 
 Evended Node.js bindings to the EC2 Query API.
 
-**Node EC2** is a minimal Node.js API with a pinch of sugar.
-
-**Node EC2** creates a signed request from a AWS EC command name a plain old
+ * **Node EC2** is a minimal Node.js API with a pinch of sugar.
+ * **Node EC2** creates a signed request from a AWS EC command name a plain old
 JavaScript object of command parameters.
-
-**Node EC2** parses the XML response and converts it into JSON.
-
-**Node EC2** does **not** define control flow, so use your favorite flow control
-library. It let's Amazon AWS do all the validation in one place.
-
-### API Reference
+ * **Node EC2** parses the XML response and converts it into JSON.
+ * **Node EC2** does **not** define control flow, so use your favorite control flow
+library.
+ * **Node EC** let's Amazon AWS do all the error checking in one place, then
+   returns the errors as an `Error` to a Node.js style callback.
 
 Because **Node EC2** is such a thin layer over the Amazon AWS EC2 API you can
 use the [Amazon API
@@ -42,20 +39,13 @@ available immediately to node-ec2 applications.
 You can learn more about node-ec2 at the node-ec2 GitHub web page and by reading
 the wiki.
 
-# Node EC2
+### Synopsis
 
-Evended Node.js bindings to the EC2 Query API.
+An example using
+[RunInstances](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?ApiReference-query-RunInstances.html) to launch a 32-bit Fedora 17 instance in Virginia.
 
-## Synopsis
-
-Node EC2 is a thin layer over the Amazon Query API.
-
-
-Other than converting parameter maps to signed query strings and converting the
-XML responses to JSON objects, there is no syntactic sugar. See Rationale.
-
-Here's an example using
-[RunInstances](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?ApiReference-query-RunInstances.html).
+Our program reads the AWS secrets from a file named "~/.aws" that contains the
+key and secret as JSON.
 
 ```
 { "key": "EXAMPLE"
@@ -63,12 +53,16 @@ Here's an example using
 }
 ```
 
+Our program launches and instance, then calls `"DescribeInstances"` until it is
+ready to use. When it's read it prints the TK host name for use with `ssh`.
+
 ```javascript
 // Require EC2.
 var ec2 = require("ec2");
 
 // Read in the configuration above.
 var configuration = JSON.parse(fs.readFileSync("configuration.json", "utf8"));
+configuration.endpoint = "us-east-1";
 
 // Create an ec2 function that uses your configuration.
 ec2 = ec2(configuration)
