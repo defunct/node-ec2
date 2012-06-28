@@ -12,14 +12,14 @@ JavaScript object of command parameters.
 **Node EC2** does **not** define control flow, so use your favorite flow control
 library. It let's Amazon AWS do all the validation in one place.
 
-## API Reference
+### API Reference
 
 Because **Node EC2** is such a thin layer over the Amazon AWS EC2 API you can
 use the [Amazon API
 Reference](http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/index.html?query-apis.html)
 to find your way around. Node EC2 calls translate directly to Amazon Query API.
 
-## Why So Simple?
+### Why So Simple?
 
 Another implementation might set out to define a library of functions, one for
 each function provided by the AWS EC2 API. This way, you could validate the
