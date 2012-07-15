@@ -334,7 +334,7 @@ $ ec2 RunInstances ImageId ami-08d97e61 KeyName launch_key MinCount 1 MaxCount 1
 
 Changes for each release since 0.1.1.
 
-### Version 0.1.1 &mdash; 
+### Version 0.1.1 &mdash; Thu Jun 28 22:08:28 UTC 2012
 
  * Publish a version without junk directories that defeat NPM. #9. #23.
  * Create change log. #13.
