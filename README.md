@@ -120,6 +120,7 @@ Options to the ec2 function are:
    secret.
  * `endpoint` &mdash; Either the region identifier or else the fully qualified
    domain name of the AWS server.
+ * `wsdlVersion` &mdash; The desired wsdl version to use. Optional, as the default has been left as "2011-05-15" in order to be backward compatible.     
 
 The region identifiers are one of the following.
 
@@ -129,6 +130,7 @@ The region identifiers are one of the following.
  * `sa-east-1` &mdash; Sao Paluo.
  * `ap-northeast-1` &mdash; Tokyo.
  * `ap-southeast-1` &mdash; Singapore.
+ * `ap-southeast-2` &mdash; Sydney.
  * `eu-west-1` &mdash; Ireland.
 
 If you do not specify `endpoint` when you construct your `ec2` function, you can
@@ -143,6 +145,7 @@ and a callback.
 var ec2 = require("ec2")({ key: "<REDACTED>"
                          , secret: "<REDACTED>"
                          , endpoint: "us-east-1"
+                         , wsdlVersion: "2012-10-01"
                          })
   , parameters;
 
@@ -166,6 +169,7 @@ argument to the **Node EC2** function.
 var ec2 = require("ec2")({ key: "<REDACTED>"
                          , secret: "<REDACTED>"
                          , endpoint: "us-east-1"
+                         , wsdlVersion: "2012-10-01"
                          })
   , parameters;
 
@@ -184,12 +188,13 @@ ec2({ endpoint: "us-west-2" }, "RunInstances", parameters, function (error, resu
 
 You can also create a new **Node EC2** function that extends configuration of an
 **Node EC2** function. You can use this to create a base function that holds
-your credentials, and specific functions for the specific regions.
+your credentials, and specific functions for the specific regions or wsdl Version.
 
 ```javascript
 var ec2 = require("ec2")({ key: "<REDACTED>" , secret: "<REDACTED>" })
-  , ec2east = ec2({ endpoint: "us-east-1" })
-  , ec2west = ec2({ endpoint: "us-west-2" })
+  , ec2east2012 = ec2({ endpoint: "us-east-1", wsdlVersion: "2012-10-01" })
+  , ec2west2012 = ec2({ endpoint: "us-west-2", wsdlVersion: "2012-10-01" })
+  , ec2east2011 = ec2(endpoint: "us-east-1")
   , parameters
   ;
 

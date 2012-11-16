@@ -4,6 +4,7 @@ var configuration =
 { key: 'AKIAIBI7OMTXJHBKKPRA'
 , secret: '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'
 , endpoint: 'us-east-1'
+, wsdlVersion: '2012-10-01'
 };
 
 require('proof')(1, function (callback) {
