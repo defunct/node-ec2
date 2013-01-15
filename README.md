@@ -31,7 +31,7 @@ key and secret as JSON.
 ```
 
 Our program launches and instance, then calls `"DescribeInstances"` until it is
-ready to use. When it's read it prints the TK host name for use with `ssh`.
+ready to use. When it's ready, it prints the TK host name for use with `ssh`.
 
 ```javascript
 // Require EC2.
