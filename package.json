@@ -12,6 +12,6 @@
 ,   "devDependencies":
     { "proof": "0.0.26" }
 , "lib" : "lib"
-, "scripts" : { "test": "proof t/*/*.t" }
+, "scripts" : { "test": "proof t/*/*.t.js" }
 , "engines" : { "node": "> 0.6.0" }
 }
