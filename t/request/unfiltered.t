@@ -7,9 +7,11 @@ var configuration =
 , wsdlVersion: '2012-10-01'
 };
 
-require('proof')(1, function (callback) {
-  var ec2 = require('../..')(configuration);
-  ec2('DescribeRegions', {}, callback('object'));
-}, function (object, equal) {
-  equal(object.regionInfo.filter(function (info) { return info.regionName == 'us-east-1' }).length, 1, 'request');
+require('proof')(1, function (step, equal) {
+  step(function () {
+    var ec2 = require('../..')(configuration);
+    ec2('DescribeRegions', {}, step());
+  }, function (object) {
+    equal(object.regionInfo.filter(function (info) { return info.regionName == 'us-east-1' }).length, 1, 'request');
+  });
 });

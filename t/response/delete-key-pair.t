@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
-require("./proof")(1, function (parse, callback) {
-  parse("DeleteKeyPair", callback("object"));
-}, function (object, deepEqual) {
-  var expected = { "return": true };
-  deepEqual(object, expected, "parse delete key pair");
+require("./proof")(1, function (step, parse, deepEqual) {
+  step(function () { 
+    parse("DeleteKeyPair", step());
+  }, function (object) {
+    var expected = { "return": true };
+    deepEqual(object, expected, "parse delete key pair");
+  });
 });
